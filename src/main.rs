@@ -1,15 +1,13 @@
-use polars::error::PolarsError;
 use polars::prelude::DataFrame;
 
-mod strings;
+mod aggregation;
 
-fn main() -> Result<(), PolarsError> {
-    let df: DataFrame = strings::make_dataset()?;
-    println!("{}", df);
-    strings::calculate_string_length(&df)?;
-    strings::extract_player(&df)?;
-    strings::extract_all_number_occurrences(&df)?;
-    strings::replace_a_pattern(&df)?;
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let df: DataFrame = aggregation::download_csv()?;
+    println!("{}", &df);
+    aggregation::group_data(&df)?;
+    aggregation::group_with_condition(&df)?;
+    aggregation::filter_data_groups(&df)?;
+    aggregation::sort_group_data(&df)?;
     Ok(())
-
 }
