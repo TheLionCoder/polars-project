@@ -12,6 +12,11 @@ polars = { version = "0.43.1", features = [
   "regex",
   "temporal",
   "dtype-categorical",
+  "concat_str",
+  "list_eval",
+  "random",
+  "rank",
+  "round_series",
 ] }
 chrono = "0.4.38"
 rand = "0.8.5"
