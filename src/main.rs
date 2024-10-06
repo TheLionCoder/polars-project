@@ -1,20 +1,16 @@
-use polars::prelude::*;
+mod grouping;
 
-mod list_and_arrays;
+use polars::prelude::DataFrame;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let df: DataFrame = list_and_arrays::make_dataset()?;
-    let daily_df: DataFrame = list_and_arrays::make_day_dataset()?;
-    let array_df: DataFrame = list_and_arrays::make_array_dataset()?;
+    let dataset: DataFrame = grouping::load_data("./assets/apple_stock.csv")?;
+    let range_date: DataFrame = grouping::make_dataset()?;
 
-    println!("{}", &df);
-    println!("{}", &daily_df);
-    println!("{}", &array_df);
+    println!("{}", dataset);
+    println!("{}", range_date);
 
-    list_and_arrays::create_list_column(&df)?;
-    list_and_arrays::measure_list_column(&df)?;
-    list_and_arrays::compute_within_list(&df)?;
-    list_and_arrays::calculate_percentage_rank(&daily_df)?;
+    grouping::get_annual_avg_closing_price(&dataset)?;
+    grouping::calculate_days_between(&range_date)?;
+
     Ok(())
 }
-

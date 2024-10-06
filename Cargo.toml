@@ -8,6 +8,7 @@ polars = { version = "0.43.1", features = [
   "lazy",
   "describe",
   "dtype-datetime",
+  "dtype-date",
   "strings",
   "regex",
   "temporal",
@@ -17,6 +18,15 @@ polars = { version = "0.43.1", features = [
   "random",
   "rank",
   "round_series",
+  "dtype-struct",
+  "diagonal_concat",
+  "csv",
+  "pivot",
+  "timezones",
+  "is_between",
+  "dynamic_group_by",
+  "range",
+  "cum_agg",
 ] }
 chrono = "0.4.38"
 rand = "0.8.5"
