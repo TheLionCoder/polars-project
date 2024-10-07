@@ -27,6 +27,7 @@ polars = { version = "0.43.1", features = [
   "dynamic_group_by",
   "range",
   "cum_agg",
+  "interpolate",
 ] }
 chrono = "0.4.38"
 rand = "0.8.5"

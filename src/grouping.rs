@@ -33,6 +33,25 @@ pub(crate) fn make_dataset() -> PolarsResult<DataFrame> {
     Ok(dataset)
 }
 
+pub(crate) fn make_grouped_df() -> PolarsResult<DataFrame> {
+    let time: DatetimeChunked = polars::time::date_range(
+        "time".into(),
+        NaiveDate::from_ymd_opt(2021, 12, 16).unwrap()
+            .and_hms_opt(0, 0, 0).unwrap(),
+        NaiveDate::from_ymd_opt(2021, 12, 16).unwrap().and_hms_opt(3, 0, 0).unwrap(),
+        Duration::parse("30m"),
+        ClosedWindow::Both,
+        TimeUnit::Milliseconds,
+        None
+    )?;
+
+    let df: DataFrame = df!(
+        "time" => time,
+        "groups" => &["a", "a", "a", "b", "b", "a", "a"]
+    )?;
+    Ok(df)
+}
+
 pub(crate) fn get_annual_avg_closing_price(dataset: &DataFrame) -> PolarsResult<()> {
     let annual_avg_closing_price: DataFrame = dataset
         .clone()
@@ -95,6 +114,28 @@ pub(crate) fn calculate_days_between(dataset: &DataFrame) -> PolarsResult<()> {
             ) + lit(1)).alias("days_in_month"),
         ]
         ).collect()?;
+    println!("{}", df);
+    Ok(())
+}
+
+pub(crate) fn rolling_operations(dataset: &DataFrame) -> PolarsResult<()> {
+    let df: DataFrame = dataset
+        .clone()
+        .lazy()
+        .group_by_dynamic(
+            col("time"),
+            [col("groups")],
+            DynamicGroupOptions {
+                every: Duration::parse("1h"),
+                period: Duration::parse("1h"),
+                offset: Duration::parse("0"),
+                include_boundaries: true,
+                closed_window: ClosedWindow::Both,
+                ..Default::default()
+            },
+        )
+        .agg([len()])
+        .collect()?;
     println!("{}", df);
     Ok(())
 }

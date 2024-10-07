@@ -1,16 +1,16 @@
-mod grouping;
+mod time_zones;
 
 use polars::prelude::DataFrame;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let dataset: DataFrame = grouping::load_data("./assets/apple_stock.csv")?;
-    let range_date: DataFrame = grouping::make_dataset()?;
+    let range_date: DataFrame = time_zones::make_dataset()?;
+    let df: DataFrame = time_zones::replace_time_zone(&range_date)?;
 
-    println!("{}", dataset);
     println!("{}", range_date);
+    println!("{}", df);
 
-    grouping::get_annual_avg_closing_price(&dataset)?;
-    grouping::calculate_days_between(&range_date)?;
+    time_zones::convert_time_zone(&df)?;
 
     Ok(())
 }
+
